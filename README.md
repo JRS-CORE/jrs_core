@@ -75,3 +75,12 @@ ensure jrs_inventory
 ```
 
 `server.cfg` in the pack already has the right order.
+
+## Contributors
+
+| | |
+|---|---|
+| [**NQ3Z**](https://github.com/NQ3Z) (Jehad Abdulwahab) | Maintainer |
+| [**jrsmatrex**](https://github.com/jrsmatrex) (jrs-alomary) | Zombie events and beehive props |
+| [**gummyantifi**](https://github.com/gummyantifi) (Gummik) | Contributor |
+| [**JRS-CORE**](https://github.com/JRS-CORE) | JRS TEAM |
