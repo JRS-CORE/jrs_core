@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title data-i18n="core_redempire_hud">JRS HUD</title>
+	<title data-i18n="core_jrs_hud">JRS HUD</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="grid.css">
@@ -31,29 +31,29 @@
 
 <div id="ui" style="display:none;">
 	<div class="playerStats">
-		<div class="stat hud-user-hidden" id="PlayerGold">
+		<div class="stat" id="PlayerGold">
 			<div class="icon"><div class="icon-slot" data-jrs-icon="gold"></div></div><span>0 𝕲</span>
 		</div>
-		<div class="stat hud-user-hidden" id="PlayerMoney">
+		<div class="stat" id="PlayerMoney">
 			<div class="icon"><div class="icon-slot" data-jrs-icon="money"></div></div><span>$ 0</span>
 		</div>
-		<div class="stat hud-user-hidden" id="PlayerDirtyMoney">
+		<div class="stat" id="PlayerDirtyMoney">
 			<div class="icon"><img src="img/dirtymoney.png"></div><span>$ 0</span>
 		</div>
 		<div class="stat-divider"></div>
-		<div class="stat hud-user-hidden" id="id">
+		<div class="stat" id="id">
 			<div class="icon"><div class="icon-slot" data-jrs-icon="userId"></div></div><span data-i18n="core_id">ID: 1</span>
 		</div>
-		<div class="stat hud-user-hidden" id="job">
+		<div class="stat" id="job">
 			<div class="icon"><div class="icon-slot" data-jrs-icon="job"></div></div><span data-i18n="job_unemployed">Unemployed</span>
 		</div>
-		<div class="stat hud-user-hidden" id="xp">
+		<div class="stat" id="xp">
 			<div class="icon"><img src="img/jobs/xp.png"></div><span data-i18n="core_level_sample">LV 1</span>
 		</div>
-		<div class="stat hud-user-hidden" id="town">
+		<div class="stat" id="town">
 			<div class="icon"><img src="img/jobs/Town.png"></div><span>.</span>
 		</div>
-		<div class="stat pvp-enabled hud-user-hidden" id="pvp">
+		<div class="stat pvp-enabled" id="pvp">
 			<div class="icon"><div class="icon-slot" data-jrs-icon="pvp"></div></div><span data-i18n="core_pvp_on">PVP ON</span>
 		</div>
 	</div>
@@ -313,7 +313,7 @@
 <div id="levelHud" class="levelHud">
     <div id="levelHudCard" class="levelHud__card" aria-hidden="true">
         <!-- Tier 1: Double / Multiplier XP Boost (Top row inside the unified UI card) -->
-        <div id="doubleXpHud" class="levelHud__tier levelHud__tier--boost tier-hidden hud-user-hidden" aria-hidden="true">
+        <div id="doubleXpHud" class="levelHud__tier levelHud__tier--boost tier-hidden" aria-hidden="true">
             <div class="levelHud__inner">
                 <div class="rankBadge" aria-hidden="true">
                     <img src="img/level/mp_rank_toast.png" alt="">
@@ -380,7 +380,7 @@
 <section id="core-progressbar" class="core-progressbar" aria-hidden="true">
     <div class="core-progress-card">
         <div class="core-progress-head">
-            <span id="core-progress-brand" class="core-progress-brand" data-i18n="core_redempire">JRS</span>
+            <span id="core-progress-brand" class="core-progress-brand" data-i18n="core_brand">JRS</span>
             <span id="core-progress-label" class="core-progress-label" data-i18n="core_working">Working...</span>
         </div>
         <div class="core-progress-row">
@@ -392,12 +392,10 @@
     </div>
 </section>
 
-<iframe data-i18n-title="core_jrs_library_dialogs" id="jrsLibUi" src="jrslib/index.html" title="JRS library dialogs" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;border:0;background:transparent;pointer-events:none;z-index:2147483000"></iframe>
 
 <iframe data-i18n-title="core_jrs_input" id="jrsInputModule" src="modules/input/index.html" title="JRS input" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;border:0;background:transparent;pointer-events:none;visibility:hidden;z-index:2147483400"></iframe>
 <iframe data-i18n-title="core_jrs_menu" id="jrsMenuModule" src="modules/menu/ui.html" title="JRS menu" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;border:0;background:transparent;pointer-events:none;visibility:visible;z-index:2147483350"></iframe>
 <iframe id="jrsExtInputModule" src="modules/extinput/index.html" title="JRS advanced input" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;border:0;background:transparent;pointer-events:none;visibility:hidden;z-index:2147483460"></iframe>
-<iframe id="jrsExtLibModule" src="modules/extlib/index.html" title="JRS lib" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;border:0;background:transparent;pointer-events:none;visibility:visible;z-index:2147483300"></iframe>
 <iframe data-i18n-title="core_jrs_optional_toast" id="jrsNotifyModule" src="modules/notify/index.html" title="JRS optional toast" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;border:0;background:transparent;pointer-events:none;visibility:visible;z-index:2147483450"></iframe>
 <script src="module-relay.js"></script>
 </body>

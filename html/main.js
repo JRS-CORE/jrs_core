@@ -89,8 +89,8 @@ if (document.readyState === "loading") {
 
 const HUD_LAYOUT_IDS = ['PlayerGold', 'PlayerMoney', 'PlayerDirtyMoney', 'id', 'job', 'xp', 'town', 'pvp', 'doubleXpHud']
 
-// All compact HUD elements default to hidden ("NOT ACTIVE") for characters with no saved layout yet.
-// Players can activate, move, and customize any element through the /editcorehud editor.
+// All compact HUD elements are shown by default. Players can hide them with /hud,
+// or move, resize and switch single elements off through the /editcorehud editor.
 const HUD_DEFAULT_HIDDEN = {
 	PlayerGold: true,
 	PlayerMoney: true,
@@ -160,7 +160,7 @@ const coreProg = {
 				displayBrand = window.JrsI18n.t(brand, window.JrsI18n.t(brand.toLowerCase(), brand));
 			}
 			if (!displayBrand || displayBrand === 'undefined' || displayBrand === '') {
-				displayBrand = window.JrsI18n ? window.JrsI18n.t('core_redempire', 'JRS') : 'JRS';
+				displayBrand = window.JrsI18n ? window.JrsI18n.t('core_brand', 'JRS') : 'JRS';
 			}
 			this.brand.textContent = String(displayBrand);
 		}
@@ -190,14 +190,6 @@ $(document).ready(function() {
 		} else if (event.data.action === "coreProgressHide") {
 			coreProg.setVisible(false);
 			return;
-		}
-		if (typeof event.data.type === 'string' && event.data.type.indexOf('jrslib:') === 0) {
-			const frame = document.getElementById('jrsLibUi')
-			if (frame && frame.contentWindow) {
-				frame.style.pointerEvents = ((event.data.type === 'jrslib:open_inputs' || event.data.type === 'jrslib:open_answer') && event.data.status === true) ? 'auto' : 'none'
-				frame.contentWindow.postMessage(event.data, '*')
-			}
-			return
 		}
 		if (event.data.action == "setValuejrscore"){
 			if (hudDebug) console.log('[jrs_core:HUD] received setValuejrscore: ' + event.data.key + ' = ' + event.data.value)
@@ -362,8 +354,8 @@ function ensureHudElementSettings(id) {
 	const settings = hudLayout[id]
 	const scale = Number(settings.scale)
 	settings.scale = Number.isFinite(scale) ? Math.min(1.8, Math.max(0.5, scale)) : 1
-	// All core HUD elements are permanently inactive ("غير نشط")
-	settings.visible = false
+	// Shown unless this element was switched off (editor / saved layout)
+	settings.visible = settings.visible !== false
 	// "" means "keep this element's own default colour" (the hardcoded
 	// per-#id rule in style.css) rather than forcing white on everything.
 	settings.color = HEX_COLOR_RE.test(settings.color) ? settings.color : ''
@@ -383,7 +375,7 @@ function applyHudElementSettings(id) {
 	} else {
 		element.style.removeProperty('--hud-color')
 	}
-	element.classList.add('hud-user-hidden')
+	element.classList.toggle('hud-user-hidden', settings.visible === false)
 	element.classList.toggle('hud-config-hidden', hudConfigVisibility[id] === false)
 }
 
@@ -1017,8 +1009,11 @@ function applyHudExportAccess(canExport) {
 }
 
 function toggleHudElementVisibility(id) {
-	// Core HUD elements are permanently inactive ("غير نشط")
-	return
+	if (!hudEditorActive || HUD_LAYOUT_IDS.indexOf(id) === -1) return
+	const settings = ensureHudElementSettings(id)
+	settings.visible = settings.visible === false
+	applyHudElementSettings(id)
+	renderHudEditorControls()
 }
 
 function setSelectedHudScale(value) {
@@ -1032,8 +1027,13 @@ function setSelectedHudScale(value) {
 }
 
 function toggleSelectedHudVisibility() {
-	// Core HUD elements are permanently inactive ("غير نشط")
-	return
+	if (!hudEditorActive) return
+	const next = ensureHudElementSettings(hudSelectedElement).visible === false
+	hudLinkedMembersOf(hudSelectedElement).forEach(function(id) {
+		ensureHudElementSettings(id).visible = next
+		applyHudElementSettings(id)
+	})
+	renderHudEditorControls()
 }
 
 function setSelectedHudColor(value) {

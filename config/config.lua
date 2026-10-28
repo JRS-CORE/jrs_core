@@ -19,6 +19,10 @@ Config.Onesync = true
 
 Config.Info_print = false
 
+-- Console version report at boot: false = only resources that are out of date,
+-- true = one line for every resource.
+Config.VersionList = false
+
 -- Require an issued jrs_idcard for every new job assignment (including admins).
 -- Unemployed remains available for firing/quitting. Existing jobs are not removed.
 Config.JobIdentity = { Required = false } -- true needs jrs_idcard
@@ -181,35 +185,37 @@ Config.DoubleXP = {
     },
 }
 
--- HUD element visibility toggles (master toggles from server)
+-- Compact HUD (money, gold, job, level, town, PVP, Double XP banner).
+--   enabled        developer master switch: false turns the compact HUD off for everyone
+--   PlayerCommand  command players use to hide / show it (remembered on their PC), false = no command
+--   <element>      false = that element is never shown on this server
 Config.Hud = {
-    enabled = true,      -- master toggle: true allows HUD & editor to work
-    PlayerGold = true,   -- gold display
-    PlayerMoney = true,  -- money display
-    PlayerDirtyMoney = true, -- dirty / illegal money display
+    enabled = true,
+    PlayerCommand = "hud",
+    PlayerGold = true,   -- gold
+    PlayerMoney = true,  -- money
+    PlayerDirtyMoney = true, -- dirty money
     id = true,           -- player ID
-    job = true,          -- job/role
-    xp = true,           -- LV row on the compact HUD
+    job = true,          -- job
+    xp = true,           -- level
     town = true,         -- current town
-    pvp = true,          -- PVP ON/OFF row
-    doubleXpHud = true,  -- timed Double XP event banner
+    pvp = true,          -- PVP ON/OFF
+    doubleXpHud = true,  -- Double XP banner
 }
 
--- Default layout for the compact HUD's per-character layout table.
--- All core HUD elements are permanently inactive (visible = false / "غير نشط")
--- across the server, editor, and database, so they never clutter the screen.
+-- Layout for characters that have no saved layout yet. Players move, resize and
+-- hide single elements in /editcorehud. visible = false starts an element hidden.
 Config.HudDefaultLayout = {
-    PlayerGold       = { x = 0.95, y = 0.05, scale = 1.0, visible = false },
-    PlayerMoney      = { x = 0.95, y = 0.08, scale = 1.0, visible = false },
-    PlayerDirtyMoney = { x = 0.95, y = 0.11, scale = 1.0, visible = false },
-    id               = { x = 0.95, y = 0.14, scale = 1.0, visible = false },
-    job              = { x = 0.95, y = 0.17, scale = 1.0, visible = false },
-    xp               = { x = 0.95, y = 0.20, scale = 1.0, visible = false },
-    town             = { x = 0.95, y = 0.23, scale = 1.0, visible = false },
-    pvp              = { x = 0.95, y = 0.26, scale = 1.0, visible = false },
-    doubleXpHud      = { x = 0.50, y = 0.02, scale = 1.0, visible = false },
+    PlayerGold       = { x = 0.95, y = 0.05, scale = 1.0, visible = true },
+    PlayerMoney      = { x = 0.95, y = 0.08, scale = 1.0, visible = true },
+    PlayerDirtyMoney = { x = 0.95, y = 0.11, scale = 1.0, visible = true },
+    id               = { x = 0.95, y = 0.14, scale = 1.0, visible = true },
+    job              = { x = 0.95, y = 0.17, scale = 1.0, visible = true },
+    xp               = { x = 0.95, y = 0.20, scale = 1.0, visible = true },
+    town             = { x = 0.95, y = 0.23, scale = 1.0, visible = true },
+    pvp              = { x = 0.95, y = 0.26, scale = 1.0, visible = true },
+    doubleXpHud      = { x = 0.50, y = 0.02, scale = 1.0, visible = true },
 }
-
 -- Central HUD gate (client/hud_gate.lua).
 -- When a script opens its UI, BOTH the jrs_core compact HUD and the
 -- jrs_metabolism status HUD are hidden, and they come back when it is closed.
@@ -239,7 +245,7 @@ Config.HudGate = {
     },
 }
 
--- Players can use /editcorehud to move, resize, show or hide compact HUD elements.
+-- Players use /editcorehud to move, resize, show or hide compact HUD elements.
 -- Position, size and visibility are stored per character in jrs_core_hud_layouts.
 Config.HudEditor = {
     enabled = true,
@@ -287,9 +293,9 @@ Config.PlayerInteractions = {
     GiveSlap = true,
     TakeHostage = true,
 
-    GiveHandControlHash = `INPUT_CONTEXT_X`,
-    GiveSlapControlHash = `INPUT_INTERACT_OPTION1`,
-    TakeHostageControlHash = `INPUT_PROMPT_PAGE_NEXT`,
+    GiveHandControlHash = joaat("INPUT_CONTEXT_X"),
+    GiveSlapControlHash = joaat("INPUT_INTERACT_OPTION1"),
+    TakeHostageControlHash = joaat("INPUT_PROMPT_PAGE_NEXT"),
     ReleaseControlHash = 0x07CE1E61,
 
     SocialActionCooldownMs = 2000,
@@ -628,40 +634,6 @@ Config.Performance = {
 }
 end
 
-
--- --------------------------------------------------------------------------
---  Shared library
--- --------------------------------------------------------------------------
-do
--- ---------------------------------------------------------------------------
--- Shared helper library (merged in from the standalone jrs_lib resource)
---
--- jrs_lib used to define a bare `Config = {}` of its own. Inside jrs_core that
--- would wipe the framework's own Config table, so every former jrs_lib setting
--- now lives under Config.Lib.
--- ---------------------------------------------------------------------------
-
-Config = Config or {}
-
-Config.Lib = {
-    -- Folder the built-in notification fallback pulls item icons from. Only
-    -- used when jrs_notify is not running.
-    FolderWithIcons = 'jrs_inventory/html/images/items/',
-
-    -- Developer helpers jrs_lib registered unconditionally. Kept on so the
-    -- merge does not silently remove tools that were already available.
-    EnableDevCommands = true,
-    PolyPointCommand  = 'polyPoint',
-    TargetCommand     = 'target',
-
-    -- Field names the server API reports back to callers.
-    CharacterTable  = 'Characters',
-    JobColumn       = 'job',
-    JobGradeColumn  = 'jobgrade',
-    SteamColumn     = 'identifier',
-    CharIdColumn    = 'charidentifier',
-}
-end
 
 
 -- --------------------------------------------------------------------------

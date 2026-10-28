@@ -11,7 +11,7 @@ local StarterOriginServer = {}
 RegisterNetEvent('jrs_core:server:requestStarterOriginMenu', function()
     local sourceId = source
     local user = jrsCore.getUser(sourceId)
-    local character = user and user.getUsedCharacter
+    local character = user and (user.character or user.getUsedCharacter)
     if not character or not character.charIdentifier then return end
 
     local charId = tonumber(character.charIdentifier)
@@ -37,7 +37,7 @@ RegisterNetEvent('jrs_core:server:selectStarterOrigin', function(originId)
     if not originConfig then return end
 
     local user = jrsCore.getUser(sourceId)
-    local character = user and user.getUsedCharacter
+    local character = user and (user.character or user.getUsedCharacter)
     if not character or not character.charIdentifier then return end
 
     local charId = tonumber(character.charIdentifier)
@@ -159,7 +159,7 @@ AddEventHandler('jrs_core:server:characterReady', function(sourceId, character)
     SetTimeout(1500, function()
         -- Ensure player is still active and valid with the same character
         local user = jrsCore.getUser(sourceId)
-        local curChar = user and user.getUsedCharacter
+        local curChar = jrsCore.GetCharacter(source)
         if not curChar or tonumber(curChar.charIdentifier) ~= charId then
             startersInProgress[charId] = nil
             return

@@ -7,11 +7,6 @@ author 'JRS TEAM'
 description 'JRS unified core: core + native notifications + optional toast + inputs + menu + character services + bounded RPC'
 version '2.5.6-habitats'
 
--- Compatibility aliases for resources that only declare legacy dependencies.
-provide 'jrs_inputs'
-provide 'jrs_menu'
-provide 'jrs_notify'
-provide 'jrs_lib'
 
 --[[
   CLIENT/SCRIPT POOL SIZE INCREASES (merged in from jrs_poolsizes 2026-09-12)
@@ -96,7 +91,6 @@ files {
     'html/vendor/*.js',
     'html/*.ttf',
     'html/modules/**/*',
-    'html/jrslib/**/*',
     'html/storeui/*.png',
     'html/theme/*.css',
     'html/img/*.png',
@@ -139,6 +133,9 @@ client_scripts {
     'client/job_xp.lua',
     'client/double_xp.lua',
     'client/character_ready.lua',
+    'client/jrs_rpc.lua',
+    'client/jrs_death.lua',
+    'client/jrs_menu_api.lua',
     'client/gameplay.lua',
     'client/gamepad.lua',
     'client/network_guard.lua',
@@ -161,8 +158,6 @@ client_scripts {
     'client/performance.lua',
     'client/player_dropped.lua',
     'client/feed.lua',
-    'client/lib.lua',
-    'client/lib_exports.lua',
     'client/language.lua',
     'client/starter_origin.lua',
     'client/world_interiors.lua'
@@ -203,8 +198,10 @@ server_scripts {
     'server/performance.lua',
     'server/devtools_guard.lua',
     'server/player_dropped.lua',
-    'server/language.lua',
-    'server/lib.lua'
+    'server/jrs_rpc.lua',
+    'server/jrs_player.lua',
+    'server/jrs_death.lua',
+    'server/language.lua'
 }
 
 -- MySQL must be available before core persistence initializes.
@@ -219,12 +216,8 @@ escrow_ignore {
     '*.sql',
 }
 
--- extended API (GetCore, Core.Callback, notifications, death/respawn) for the extra scripts
-client_scripts { 'client/compat_callbacks.lua', 'client/compat_api.lua', 'client/respawn.lua' }
-server_scripts { 'server/compat_callbacks.lua', 'server/compat_api.lua', 'server/compat_state.lua' }
 
--- built-in menu / advanced inputs / lib / theme exports (no separate jrs_menu, jrs_inputs, jrs_lib)
+-- built-in menu / advanced inputs / theme exports (no separate jrs_menu, jrs_inputs)
 shared_scripts { 'shared/ext_theme.lua' }
-client_scripts { 'client/ext_menu.lua', 'client/ext_inputs.lua', 'client/ext_lib_bridge.lua', 'lib/client/main/*.lua' }
-server_scripts { 'lib/server/main/*.lua' }
-files { 'lib/**/*', 'html/theme/*' }
+client_scripts { 'client/ext_menu.lua', 'client/ext_inputs.lua' }
+files { 'html/theme/*' }
